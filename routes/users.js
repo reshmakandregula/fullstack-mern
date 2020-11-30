@@ -9,55 +9,54 @@ router.get('/', (req, res) => {
          .then(data => res.json(data))
          .catch(err => res.status(400).json('Error:' + err));
     }); 
+ 
+
+router.post('/', async (req, res) => {
+    const {firstName, lastName, age, gender} = req.body;
+    try{
+        const newUser = new user({
+            firstName,
+            lastName,
+            age,
+            gender
+        });
+
+        const user1 = await newUser.save();
+
+        res.json(user1);
+    }catch(err) {
+        console.error(err.message);
+        res.status(500).send('Server Error..!')
+    }
+
+});
 
 
-// router.post('/', async (req, res) => {
-//     const {firstName, lastName, age, gender} = req.body;
-//     try{
-//         const newUser = new User({
-//             firstName,
-//             lastName,
-//             age,
-//             gender
-//         });
 
-//         const nuser = await newUser.save();
-
-//         res.json(nuser);
-//     }catch(err) {
-//         console.error(err.message);
-//         res.status(500).send('Server Error..!')
-//     }
-
-// });
-
-router.post('/', (req, res) => {
-    const firstName = req.body.firstName;
-    const lastName = req.body.lastName;
-    const age = req.body.age;
-    const gender = req.body.gender;
-
-    const newUser = new user({
-                    firstName,
-                    lastName,
-                    age,
-                    gender
-                });
-
-                const nuser= newUser.save()
-                .then(() => res.json(nuser))
-                .catch(err => res.status(400).json('Error:' + err));
-})
 
 
 router.put('/:id', (req, res) => {
-    res.send('update contacts');
-});
+       user.findById(req.params.id)
+         .then(data => {
+            data.firstname = req.body.firstname;
+            data.lastname = req.body.lastname;
+            data.age = Number(req.body.age);
+            data.gender = req.body.gender;
+            
+            data.save()
+            .then(() => res.json('User has been Updated...!'))
+            .catch(err => res.status(400).json('Error:' + err));
+         })
+         .catch(err => res.status(400).json('Error:' + err));
+    });
+
 
 
 router.delete('/:id', (req, res) => {
-    res.send('delete contacts');
-});
+        user.findByIdAndRemove(req.params.id)
+             .then(()=> res.json('User was deleted...'))
+             .catch(err => res.status(400).json('Error:' + err));
+        });
 
 
 module.exports = router;

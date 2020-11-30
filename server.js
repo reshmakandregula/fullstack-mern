@@ -7,6 +7,7 @@ connectDB();
 
  app.get('/', (req, res) => res.json({msg: 'Welcome to the Users API'})
  );
+ app.use(express.json());
 
  app.use('/api/users', require('./routes/users'));
 
