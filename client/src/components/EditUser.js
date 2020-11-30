@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import "../App.css";
 
-export default class EditUser extends Component {
+ class EditUser extends Component {
     state = {
         firstName:'',
         lastName:'',
@@ -13,7 +13,7 @@ export default class EditUser extends Component {
  
 
 componentDidMount() {
-    axios.get('/api/users'+this.props.key.match.params.id)
+    axios.get('/api/users/'+this.props.match.params.id)
         .then(res=> {
             this.setState({
                 firstName:res.data.firstName,
@@ -25,14 +25,14 @@ componentDidMount() {
         .catch(function(err){
             console.log(err);
         })
-    axios.get('/api/users')
-    .then(response => {
-        if(response.data.length > 0) {
-            this.setState({
-                users: response.data.map(user => user.firstName),    
-            })
-        }
-    })
+    // axios.get('/api/users/')
+    // .then(response => {
+    //     if(response.data.length > 0) {
+    //         this.setState({
+    //             users: response.data.map(user => user.firstName),    
+    //         })
+    //     }
+    // })
 }
     onChange = (e) =>{
         this.setState({
@@ -42,10 +42,12 @@ componentDidMount() {
 
     handleSubmit = (e) =>{
         e.preventDefault();
+        
         const config ={
             headers: {
-                'Content-Type': "application/json"
+                'Content-Type': 'application/json'
             }
+           
         };
 
         const userData = {
@@ -56,9 +58,9 @@ componentDidMount() {
         };
     
         
-          axios.put('/api/users/'+this.props.key.match.params.id, userData, config)
+          axios.put('/api/users/'+this.props.match.params.id, userData, config)
             .then(res => console.log(res.data));
-
+window.location="/";
     
         this.setState({
             firstName:'',
@@ -129,3 +131,4 @@ componentDidMount() {
 }
 
 
+export default EditUser

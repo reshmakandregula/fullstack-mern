@@ -8,6 +8,8 @@ export default class CreateUser extends Component {
         lastName:'',
         age:0,
         gender:'',
+        error:'',
+        visible: true,
         users:[]
     }
  
@@ -23,6 +25,20 @@ componentDidMount() {
         }
     })
 }
+
+validate= () => {
+    let error='';
+
+      if(!this.state.firstName || !this.state.lastName || !this.state.age){
+        error="can't be Blank";
+    }
+      if(error){
+          this.setState({error});
+          return false;
+      }
+      return true;
+
+}
     onChange = (e) =>{
         this.setState({
             [e.target.name]: e.target.value
@@ -33,7 +49,7 @@ componentDidMount() {
         e.preventDefault();
         const config ={
             headers: {
-                'Content-Type': "application/json"
+                'Content-Type': 'application/json'
             }
         };
 
@@ -45,13 +61,11 @@ componentDidMount() {
         };
     
         
-
-
-        
-
-        axios.post('/api/users', userData, config)
+       const isValid = this.validate();
+        if(isValid){
+            axios.post('/api/users', userData, config)
             .then(res => console.log(res.data));
-
+           window.location="/";
     
         this.setState({
             firstName:'',
@@ -60,11 +74,19 @@ componentDidMount() {
             gender:''
         })
     }
+        }
+        
+
+        
     render() {
         return (
             <div className="container">
-                <br/>
+    <button className="btn btn-primary" onClick={() => {this.setState({
+        visible:false
+    })}}>Add Details</button>
                     <br/>
+                    <br/>
+                    {this.state.visible ? null :
                 <form onSubmit={this.handleSubmit} className="contain">
                     
                     <div className="form-group">
@@ -77,6 +99,7 @@ componentDidMount() {
                         className="form-group"
                         value={this.state.firstName}
                         onChange={this.onChange}/>
+                        <div style={{ fontSize: 12, color: "red"}}>{this.state.error}</div>
                         
                     </div>
                     
@@ -89,6 +112,7 @@ componentDidMount() {
                         className="form-group"
                         value={this.state.lastName}
                         onChange={this.onChange}/>
+                        <div style={{ fontSize: 12, color: "red"}}>{this.state.error}</div>
                     </div>
                     
                     <div className="form-group">
@@ -99,6 +123,7 @@ componentDidMount() {
                         className="form-group"
                         value={this.state.age}
                         onChange={this.onChange}/>
+                        <div style={{ fontSize: 12, color: "red"}}>{this.state.error}</div>
                     </div>
                     
                     <div className="form-group">
@@ -109,12 +134,14 @@ componentDidMount() {
                         
                         <input type="radio" value="female" name="gender" checked={this.state.gender ==="female"} onChange={this.onChange}/>Female
                         </label>
+                        <div style={{ fontSize: 12, color: "red"}}>{this.state.error}</div>
                          </div>
 
                          <div className="form-group">
                             <input type="submit" value="CreateUser" className="btn btn-primary" />
                          </div>
                 </form>
+    }
             </div>
         )
     }

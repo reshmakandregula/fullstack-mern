@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 import UserForm from "./UserForm";
-import EditUser from "./EditUser";
+import {Link} from "react-router-dom";
 
 class UsersList extends Component {
 
@@ -64,7 +64,7 @@ componentDidMount() {
                     <td>{currentUser.age}</td>
                     <td>{currentUser.gender}</td>
                     <td>
-                        <button onClick={() => <EditUser key={currentUser._id}/>} className="btn btn-info">Edit</button>
+                        <Link to={"/edit/"+currentUser._id}  className="btn btn-info">Edit</Link>
                     </td>
                     <td>
                         <button onClick={() => this.deleteUser(currentUser._id)} className="btn btn-danger">Delete</button>
