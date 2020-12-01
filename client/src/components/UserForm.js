@@ -81,9 +81,12 @@ validate= () => {
     render() {
         return (
             <div className="container">
+                <div className="container" style={{textAlign:"center"}}>
+                <h1>User Entry Details</h1>
     <button className="btn btn-primary" onClick={() => {this.setState({
         visible:false
     })}}>Add Details</button>
+    </div>
                     <br/>
                     <br/>
                     {this.state.visible ? null :

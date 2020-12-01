@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import UserForm from "./UserForm";
 import {Link} from "react-router-dom";
+import "../App.css";
 
 class UsersList extends Component {
 
@@ -43,9 +44,8 @@ componentDidMount() {
     return (
         <div> 
             <UserForm />
-            <h2>Logged Users</h2>
-                <table className="table">
-                  <thead className="thead-light">
+                <table className="table table-striped">
+                  <thead className="tableHover">
                       <tr>
                           <th>Firstname</th>
                           <th>Lastname</th>

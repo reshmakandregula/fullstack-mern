@@ -33,27 +33,33 @@ router.post('/', async (req, res) => {
 
 
 
+router.put('/edit/:id', async (req, res) => {
+    const {firstName,lastName,age,gender} = req.body;
 
+    const contactFields ={};
+    if(firstName) contactFields.firstName = firstName;
+    if(lastName) contactFields.lastName = lastName;
+    if(age) contactFields.age = age;
+    if(gender) contactFields.gender = gender;
 
-router.put('/:id', (req, res) => {
-       user.findById(req.params.id)
-         .then(data => {
-            data.firstname = req.body.firstname;
-            data.lastname = req.body.lastname;
-            data.age = Number(req.body.age);
-            data.gender = req.body.gender;
-            
-            data.save()
-            .then(() => res.json('User has been Updated...!'))
-            .catch(err => res.status(400).json('Error:' + err));
-         })
-         .catch(err => res.status(400).json('Error:' + err));
-    });
+    try{
+        let User = await user.findById(req.params.id);
+
+        if(!User) return  res.sendStatus(404).json({ msg : 'user not found...'});
+        User = await user.findByIdAndUpdate(req.params.id,{$set: contactFields}, {new: true});
+
+        res.json(User);
+
+    }catch(err){
+        console.error(err.message);
+        res.status(500).send('Server Error..!')
+    }
+});
 
 
 
 router.delete('/:id', (req, res) => {
-        user.findByIdAndRemove(req.params.id)
+        user.findByIdAndDelete(req.params.id)
              .then(()=> res.json('User was deleted...'))
              .catch(err => res.status(400).json('Error:' + err));
         });

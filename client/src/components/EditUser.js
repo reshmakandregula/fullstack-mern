@@ -11,29 +11,30 @@ import "../App.css";
         users:[]
     }
  
-
-componentDidMount() {
-    axios.get('/api/users/'+this.props.match.params.id)
-        .then(res=> {
-            this.setState({
-                firstName:res.data.firstName,
-                lastName:res.data.lastName,
-                age:res.data.age,
-                gender:res.data.gender
+   
+    componentDidMount() {
+        axios.get('/api/users/'+this.props.match.params.id)
+            .then(res=> {
+                this.setState({
+                    firstName:res.data.firstName,
+                    lastName:res.data.lastName,
+                    age:res.data.age,
+                    gender:res.data.gender
+                })
             })
-        })
-        .catch(function(err){
-            console.log(err);
-        })
-    // axios.get('/api/users/')
-    // .then(response => {
-    //     if(response.data.length > 0) {
-    //         this.setState({
-    //             users: response.data.map(user => user.firstName),    
-    //         })
-    //     }
-    // })
-}
+            .catch(function(err){
+                console.log(err);
+            })
+            axios.get('/api/users')
+            .then(response => {
+                if(response.data.length > 0) {
+                    this.setState({
+                        users: response.data.map(user => user.firstName),
+                        
+                    })
+                }
+            })
+     }
     onChange = (e) =>{
         this.setState({
             [e.target.name]: e.target.value
@@ -58,10 +59,10 @@ componentDidMount() {
         };
     
         
-          axios.put('/api/users/'+this.props.match.params.id, userData, config)
+          axios.put('/api/users/edit/'+this.props.match.params.id, userData, config)
             .then(res => console.log(res.data));
 window.location="/";
-    
+    console.log(this.state);
         this.setState({
             firstName:'',
             lastName:'',
@@ -69,6 +70,9 @@ window.location="/";
             gender:''
         })
     }
+    
+
+
     render() {
         return (
             <div className="container">
