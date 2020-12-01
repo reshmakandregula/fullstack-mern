@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 
-export default function UsersTable (props) {
+export default function UsersTable ({users,deleteUser}) {
     return (
         <table className="table table-striped container">
                   <thead className="tableHover">
@@ -15,7 +15,7 @@ export default function UsersTable (props) {
                       </tr>
                   </thead>
                   <tbody>
-                      { props.users.map(currentUser => {
+                      {users.map(currentUser => {
             
               return(  <tr key={currentUser._id}>
                     <td>{currentUser.firstName}</td>
@@ -26,7 +26,7 @@ export default function UsersTable (props) {
                         <Link to={"/edit/"+currentUser._id}  className="btn btn-info">Edit</Link>
                     </td>
                     <td>
-                        <button onClick={() => this.deleteUser(currentUser._id)} className="btn btn-danger">Delete</button>
+                        <button onClick={() => deleteUser(currentUser._id)} className="btn btn-danger">Delete</button>
                     </td>
                 </tr>)
             

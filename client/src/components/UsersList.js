@@ -44,7 +44,7 @@ componentDidMount() {
     return (
         <div> 
             <UserForm />
-                <UsersTable deleteUser={this.deleteUser} users={this.state.users}/>
+            <UsersTable deleteUser={this.deleteUser} users={this.state.users}/>
         </div>
     )
     }
