@@ -4,7 +4,7 @@ import UserForm from "./UserForm";
 import UsersTable from './UsersTable';
 import "../App.css";
 
-class UsersList extends Component {
+class FrontPage extends Component {
 
     state={
         users:[]
@@ -50,4 +50,4 @@ componentDidMount() {
     }
 }
 
-export default UsersList;
+export default FrontPage;
