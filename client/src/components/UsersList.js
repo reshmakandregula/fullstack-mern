@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 import UserForm from "./UserForm";
-import {Link} from "react-router-dom";
+import UsersTable from './UsersTable';
 import "../App.css";
 
 class UsersList extends Component {
@@ -44,36 +44,7 @@ componentDidMount() {
     return (
         <div> 
             <UserForm />
-                <table className="table table-striped">
-                  <thead className="tableHover">
-                      <tr>
-                          <th>Firstname</th>
-                          <th>Lastname</th>
-                          <th>Age</th>
-                          <th>Gender</th>
-                          <th>Edit</th>
-                          <th>Delete</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      { this.state.users.map(currentUser => {
-            
-              return(  <tr key={currentUser._id}>
-                    <td>{currentUser.firstName}</td>
-                    <td>{currentUser.lastName}</td>
-                    <td>{currentUser.age}</td>
-                    <td>{currentUser.gender}</td>
-                    <td>
-                        <Link to={"/edit/"+currentUser._id}  className="btn btn-info">Edit</Link>
-                    </td>
-                    <td>
-                        <button onClick={() => this.deleteUser(currentUser._id)} className="btn btn-danger">Delete</button>
-                    </td>
-                </tr>)
-            
-        }) }
-                  </tbody>
-                </table>
+                <UsersTable deleteUser={this.deleteUser} users={this.state.users}/>
         </div>
     )
     }

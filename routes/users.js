@@ -9,6 +9,11 @@ router.get('/', (req, res) => {
          .then(data => res.json(data))
          .catch(err => res.status(400).json('Error:' + err));
     }); 
+    router.get('/edit/:id', (req, res) => {
+        user.findById(req.params.id)
+             .then(data => res.json(data))
+             .catch(err => res.status(400).json('Error:' + err));
+        }); 
  
 
 router.post('/', async (req, res) => {

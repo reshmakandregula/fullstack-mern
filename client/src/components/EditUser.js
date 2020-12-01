@@ -13,7 +13,7 @@ import "../App.css";
  
    
     componentDidMount() {
-        axios.get('/api/users/'+this.props.match.params.id)
+        axios.get('/api/users/edit/'+this.props.match.params.id)
             .then(res=> {
                 this.setState({
                     firstName:res.data.firstName,
@@ -21,6 +21,7 @@ import "../App.css";
                     age:res.data.age,
                     gender:res.data.gender
                 })
+                console.log(res.data);
             })
             .catch(function(err){
                 console.log(err);
@@ -76,7 +77,6 @@ window.location="/";
     render() {
         return (
             <div className="container">
-                <h2>Edit User Details</h2>
                 <br/>
                     <br/>
                 <form onSubmit={this.handleSubmit} className="contain">
