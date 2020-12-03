@@ -6,10 +6,10 @@ export default function UsersList({ users, deleteUser, editUser, sortUser }) {
       <table className="table table-striped container">
         <thead className="tableHover">
           <tr>
-            <th onClick={() => sortUser()}>Firstname</th>
-            <th>Lastname</th>
-            <th>Age</th>
-            <th>Gender</th>
+            <th onClick={() => sortUser("firstName")}>Firstname</th>
+            <th onClick={() => sortUser("lastName")}>lastname</th>
+            <th onClick={() => sortUser("age")}>Age</th>
+            <th onClick={() => sortUser("gender")}>Gender</th>
             <th>Edit</th>
             <th>Delete</th>
           </tr>

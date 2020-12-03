@@ -21,6 +21,12 @@ class UserForm extends Component {
       age: "",
       gender: "",
     },
+    direction: {
+      firstName: "asc",
+      lastName: "asc",
+      age: "asc",
+      gender: "asc",
+    },
   };
 
   getUsers = () => {
@@ -159,19 +165,18 @@ class UserForm extends Component {
       });
   };
 
-  sortUser = () => {
-    const { users } = this.state;
-    let sortedUsers = [...users];
-    console.log(sortedUsers);
-    //   sortedUsers.sort((a, b) => {
-    //     if (a.name < b.name) {
-    //       return -1;
-    //     }
-    //     if (a.name > b.name) {
-    //       return 1;
-    //     }
-    //     return 0;
-    //   });
+  sortUser = (name) => {
+    const users = this.state.users;
+    this.setState({
+      users: users.sort((a, b) =>
+        this.state.direction[name] === "asc"
+          ? a[name].toString().localeCompare(b[name].toString())
+          : b[name].toString().localeCompare(a[name].toString())
+      ),
+      direction: {
+        [name]: this.state.direction[name] === "asc" ? "desc" : "asc",
+      },
+    });
   };
   render() {
     return (
