@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
          .then(data => res.json(data))
          .catch(err => res.status(400).json('Error:' + err));
     }); 
-    router.get('/edit/:id', (req, res) => {
+    router.get('/:id', (req, res) => {
         user.findById(req.params.id)
              .then(data => res.json(data))
              .catch(err => res.status(400).json('Error:' + err));
@@ -38,7 +38,7 @@ router.post('/', async (req, res) => {
 
 
 
-router.put('/edit/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
     const {firstName,lastName,age,gender} = req.body;
 
     const contactFields ={};
@@ -48,10 +48,10 @@ router.put('/edit/:id', async (req, res) => {
     if(gender) contactFields.gender = gender;
 
     try{
-        let User = await user.findById(req.params.id);
+        // let User = await user.findById(req.params.id);
 
-        if(!User) return  res.sendStatus(404).json({ msg : 'user not found...'});
-        User = await user.findByIdAndUpdate(req.params.id,{$set: contactFields}, {new: true});
+        // if(!User) return  res.sendStatus(404).json({ msg : 'user not found...'});
+       let User = await user.findByIdAndUpdate(req.params.id,{$set: contactFields}, {new: true});
 
         res.json(User);
 

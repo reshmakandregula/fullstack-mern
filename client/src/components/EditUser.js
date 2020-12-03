@@ -8,39 +8,97 @@ import "../App.css";
         lastName:'',
         age:0,
         gender:'',
+        fError:'',
+        lError:'',
+        aError: '',
+        gError:'',    
         users:[]
     }
  
    
-    componentDidMount() {
-        axios.get('/api/users/edit/'+this.props.match.params.id)
-            .then(res=> {
-                this.setState({
-                    firstName:res.data.firstName,
-                    lastName:res.data.lastName,
-                    age:res.data.age,
-                    gender:res.data.gender
-                })
-                console.log(res.data);
-            })
-            .catch(function(err){
-                console.log(err);
-            })
-            axios.get('/api/users')
-            .then(response => {
-                if(response.data.length > 0) {
-                    this.setState({
-                        users: response.data.map(user => user.firstName),
-                        
-                    })
-                }
-            })
-     }
-    onChange = (e) =>{
-        this.setState({
-            [e.target.name]: e.target.value
-        })
+    validate = () => {
+        let fName = "";
+        let lName = "";
+        let aError = "";
+        let gError = "";
+    
+        if (!this.state.firstName) {
+          fName = "can't be blank";
+        }
+        if (!this.state.lastName) {
+          lName = "can't be blank";
+        }
+        if (!this.state.age) {
+          aError = "can't be blank";
+        }
+        if (!this.state.gender) {
+          gError = "can't be blank";
+        }
+        if (fName || lName || aError || gError) {
+          this.setState({ fName, lName, aError, gError });
+          return false;
+        }
+        return true;
+      };
+      componentDidMount() {
+        axios
+          .get("/api/users")
+          .then((res) => {
+            this.setState({ persons: res.data });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        axios
+          .get("/api/users/edit/" + this.props.match.params.id)
+          .then((res) => {
+            this.setState({
+              firstName: res.data.firstName,
+              lastName: res.data.lastName,
+              age: res.data.age,
+              gender: res.data.gender,
+            });
+          })
+          .catch(function (err) {
+            console.log(err);
+          });
+        axios.get("/api/users").then((response) => {
+          if (response.data.length > 0) {
+            this.setState({
+              users: response.data.map((user) => user.firstName),
+            });
+          }
+        });
+      
     }
+        onChange = (e) =>{
+          // let fError = this.state.errors.fError;
+           const {name, value} = e.target;
+           if(name === "firstName"){
+          if(this.state.firstName.length < 1){
+           this.setState({fError:""});
+          }
+           }
+        if(name === "lastName"){
+        if(this.state.lastName.length < 1){
+            this.setState({lError:""});
+        }
+            }
+        if(name === "age"){
+        if(this.state.age.length < 1){
+            this.setState({aError:""});
+        }
+            }
+        if(name === "gender"){
+        if(this.state.gender.length < 1){
+            this.setState({gError:""});
+        }
+            }
+          
+            this.setState({
+                [name]: value
+            })
+        }
 
     handleSubmit = (e) =>{
         e.preventDefault();
@@ -59,8 +117,8 @@ import "../App.css";
             gender:this.state.gender
         };
     
-        
-          axios.put('/api/users/edit/'+this.props.match.params.id, userData, config)
+        const isValid = this.validate();
+          if(isValid){axios.put('/api/users/edit/'+this.props.match.params.id, userData, config)
             .then(res => console.log(res.data));
 window.location="/";
     console.log(this.state);
@@ -71,11 +129,13 @@ window.location="/";
             gender:''
         })
     }
+};
     
 
 
     render() {
         return (
+            
             <div className="container">
                 <br/>
                     <br/>
@@ -91,7 +151,7 @@ window.location="/";
                         className="form-group"
                         value={this.state.firstName}
                         onChange={this.onChange}/>
-                        
+                        <div style={{ fontSize: 12, color: "red"}}>{this.state.fError}</div>
                     </div>
                     
                     <div className="form-group">
@@ -103,6 +163,7 @@ window.location="/";
                         className="form-group"
                         value={this.state.lastName}
                         onChange={this.onChange}/>
+                        <div style={{ fontSize: 12, color: "red"}}>{this.state.lError}</div>
                     </div>
                     
                     <div className="form-group">
@@ -113,6 +174,7 @@ window.location="/";
                         className="form-group"
                         value={this.state.age}
                         onChange={this.onChange}/>
+                        <div style={{ fontSize: 12, color: "red"}}>{this.state.aError}</div>
                     </div>
                     
                     <div className="form-group">
@@ -123,6 +185,7 @@ window.location="/";
                         
                         <input type="radio" value="female" name="gender" checked={this.state.gender ==="female"} onChange={this.onChange}/>Female
                         </label>
+                        <div style={{ fontSize: 12, color: "red"}}>{this.state.gError}</div>   
                          </div>
 
                          <div className="form-group">

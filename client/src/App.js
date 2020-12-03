@@ -1,17 +1,17 @@
-import React from 'react';
-import { BrowserRouter as Router,Route } from "react-router-dom";
+import React from "react";
+// import { BrowserRouter as Router,Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import EditUser from "./components/EditUser";
-import FrontPage from "./components/FrontPage";
-
+// import FrontPage from "./components/FrontPage";
+// import UserModal from "./components/UserModal";
+import UserForm from "./components/UserForm";
 
 function App() {
   return (
-    <Router>
-    <Route path="/" exact component={FrontPage}/>
-    <Route path="/edit/:id" component={EditUser}/>
-    </Router>
-  )
+    <div>
+      <UserForm />
+    </div>
+  );
 }
 
 export default App;
