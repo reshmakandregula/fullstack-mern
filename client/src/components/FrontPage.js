@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-import { Modal, Button } from "react-bootstrap";
 import axios from "axios";
-import "../App.css";
-import UsersList from "./UsersList";
+import UsersForm from "./UsersForm";
+import UsersTable from "./UsersTable";
 import UserModal from "./UserModal";
 //import {Link} from "react-router-dom"
 
-class UserForm extends Component {
+class FrontPage extends Component {
   state = {
     data: {
       firstName: "",
@@ -16,6 +15,7 @@ class UserForm extends Component {
     },
     visible: false,
     modalVisibility: false,
+    search: "",
     users: [],
     currentId: "",
     errors: {
@@ -98,10 +98,10 @@ class UserForm extends Component {
       },
     });
     return (
-      this.state.data.firstName !== "" &&
-      this.state.data.lastName !== "" &&
-      this.state.data.age !== "" &&
-      this.state.data.gender !== ""
+      this.state.data.firstName == "" &&
+      this.state.data.lastName == "" &&
+      this.state.data.age == "" &&
+      this.state.data.gender == ""
     );
   };
 
@@ -115,7 +115,7 @@ class UserForm extends Component {
       gender: this.state.data.gender,
     };
 
-    if (!this.validate()) return;
+    if (this.validate()) return;
     if (this.state.currentId === "") {
       console.log("addnew");
       axios.post("/api/users", userData).then((res) => console.log(res.data));
@@ -139,6 +139,10 @@ class UserForm extends Component {
     }
   };
 
+  handleChange = (e) => {
+    this.setState({ search: e.target.value });
+  };
+
   deleteUser = (id) => {
     axios.delete("/api/users/" + id).then((res) => console.log(res.data));
 
@@ -152,7 +156,6 @@ class UserForm extends Component {
       currentId: id,
       modalVisibility: true,
     });
-    console.log("edit clicked");
     axios
       .get("/api/users/" + id)
       .then((res) => {
@@ -208,103 +211,20 @@ class UserForm extends Component {
             Add Details
           </button>
         </div>
+
         <br />
         <br />
         <div>
-          {this.state.visible ? (
-            <form onSubmit={this.handleSubmit} className="contain">
-              <div className="form-group">
-                <label>Firstname: </label>
-                <br />
-                <input
-                  type="text"
-                  placeholder="Enter firstname"
-                  name="firstName"
-                  className="form-group"
-                  value={this.state.data.firstName}
-                  onChange={this.onChange}
-                />
+          {this.state.visible && (
+            <UsersForm
+              handleSubmit={this.handleSubmit}
+              data={this.state.data}
+              errors={this.state.errors}
+              onChange={this.onChange}
+            />
+          )}
 
-                <div style={{ fontSize: 12, color: "red" }}>
-                  {this.state.errors.firstName ? "can't be blank" : ""}
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label>Lastname: </label>
-                <br />
-                <input
-                  type="text"
-                  placeholder="Enter lastname"
-                  name="lastName"
-                  className="form-group"
-                  value={this.state.data.lastName}
-                  onChange={this.onChange}
-                />
-                {/* <div style={{ fontSize: 12, color: "red"}}>{this.state.lError}</div> */}
-
-                <div style={{ fontSize: 12, color: "red" }}>
-                  {this.state.errors.lastName ? "can't be blank" : ""}
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label>Age: </label>
-                <br />
-                <input
-                  type="number"
-                  name="age"
-                  className="form-group"
-                  value={this.state.data.age}
-                  onChange={this.onChange}
-                />
-                {/* <div style={{ fontSize: 12, color: "red"}}>{this.state.aError}</div> */}
-
-                <div style={{ fontSize: 12, color: "red" }}>
-                  {this.state.errors.age ? "can't be blank" : ""}
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label>
-                  Gender:
-                  <br />
-                  <input
-                    type="radio"
-                    value="male"
-                    name="gender"
-                    checked={this.state.data.gender === "male"}
-                    onChange={this.onChange}
-                  />
-                  Male
-                  <br />
-                  <input
-                    type="radio"
-                    value="female"
-                    name="gender"
-                    checked={this.state.data.gender === "female"}
-                    onChange={this.onChange}
-                  />
-                  Female
-                </label>
-                {/* <div style={{ fontSize: 12, color: "red"}}>{this.state.gError}</div> */}
-
-                <div style={{ fontSize: 12, color: "red" }}>
-                  {this.state.errors.gender ? "can't be blank" : ""}
-                </div>
-              </div>
-
-              <div className="form-group">
-                <input
-                  type="submit"
-                  value="Submit"
-                  className="btn btn-primary"
-                />
-              </div>
-            </form>
-          ) : null}
-
-          {this.state.modalVisibility ? (
+          {this.state.modalVisibility && (
             <UserModal
               closeModal={this.closeModal}
               onChange={this.onChange}
@@ -312,13 +232,16 @@ class UserForm extends Component {
               data={this.state.data}
               errors={this.state.errors}
             />
-          ) : null}
+          )}
 
-          <UsersList
+          <UsersTable
             users={this.state.users}
+            search={this.state.search}
             deleteUser={this.deleteUser}
             editUser={this.editUser}
             sortUser={this.sortUser}
+            filteredUsers={this.filteredUsers}
+            handleChange={this.handleChange}
           />
         </div>
       </div>
@@ -326,4 +249,4 @@ class UserForm extends Component {
   }
 }
 
-export default UserForm;
+export default FrontPage;

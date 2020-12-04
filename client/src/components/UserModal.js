@@ -15,11 +15,11 @@ class UserModal extends Component {
         onHide={closeModal}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Form Page</Modal.Title>
+          <Modal.Title>Edit Form Page</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="container">
-            <h2>Fill The Below Details</h2>
+            <h2>Fill The Below Details.....</h2>
             <br />
 
             <form onSubmit={handleSubmit} className="contain">
@@ -35,7 +35,7 @@ class UserModal extends Component {
                   onChange={onChange}
                 />
                 <div style={{ fontSize: 14, color: "red" }}>
-                  {errors.firstName}
+                  {errors.firstName ? "can't be blank" : ""}
                 </div>
               </div>
 
@@ -51,7 +51,7 @@ class UserModal extends Component {
                   onChange={onChange}
                 />
                 <div style={{ fontSize: 14, color: "red" }}>
-                  {errors.lastName}
+                  {errors.lastName ? "can't be blank" : ""}
                 </div>
               </div>
 
@@ -65,7 +65,9 @@ class UserModal extends Component {
                   value={data.age}
                   onChange={onChange}
                 />
-                <div style={{ fontSize: 14, color: "red" }}>{errors.age}</div>
+                <div style={{ fontSize: 14, color: "red" }}>
+                  {errors.age ? "can't be blank" : ""}
+                </div>
               </div>
 
               <div className="form-group">
@@ -91,7 +93,7 @@ class UserModal extends Component {
                   Female
                 </label>
                 <div style={{ fontSize: 14, color: "red" }}>
-                  {errors.gender}
+                  {errors.gender ? "can't be blank" : ""}
                 </div>
               </div>
             </form>
