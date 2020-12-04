@@ -1,31 +1,118 @@
-import React,{useState} from 'react';
-import {Modal, Button} from 'react-bootstrap';
+import { Modal, Button } from "react-bootstrap";
+import React from "react";
+import { render } from "@testing-library/react";
+import { Component } from "react";
 
-export default function UserModal() {
-const [show, setShow] = useState(false);
-
-const handleClose = () => setShow(false);
-const handleShow = () => setShow(true);
+class UserModal extends Component {
+  render() {
+    const { closeModal, onChange, handleSubmit, data, errors } = this.props;
     return (
-        <>
-    <Button variant="primary" onClick={handleShow}>
-      Launch demo modal
-    </Button>
+      <Modal
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        show={true}
+        onHide={closeModal}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Form Page</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="container">
+            <h2>Fill The Below Details</h2>
+            <br />
 
-    <Modal show={show} onHide={handleClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>Modal heading</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          Close
-        </Button>
-        <Button variant="primary" onClick={handleClose}>
-          Save Changes
-        </Button>
-      </Modal.Footer>
-    </Modal>
-        </>
-    )
+            <form onSubmit={handleSubmit} className="contain">
+              <div className="form-group">
+                <label>Firstname: </label>
+                <br />
+                <input
+                  type="text"
+                  placeholder="Enter firstname"
+                  name="firstName"
+                  className="form-group"
+                  value={data.firstName}
+                  onChange={onChange}
+                />
+                <div style={{ fontSize: 14, color: "red" }}>
+                  {errors.firstName}
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>Lastname: </label>
+                <br />
+                <input
+                  type="text"
+                  placeholder="Enter lastname"
+                  name="lastName"
+                  className="form-group"
+                  value={data.lastName}
+                  onChange={onChange}
+                />
+                <div style={{ fontSize: 14, color: "red" }}>
+                  {errors.lastName}
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>Age: </label>
+                <br />
+                <input
+                  type="number"
+                  name="age"
+                  className="form-group"
+                  value={data.age}
+                  onChange={onChange}
+                />
+                <div style={{ fontSize: 14, color: "red" }}>{errors.age}</div>
+              </div>
+
+              <div className="form-group">
+                <label>
+                  Gender:
+                  <br />
+                  <input
+                    type="radio"
+                    value="male"
+                    name="gender"
+                    checked={data.gender === "male"}
+                    onChange={onChange}
+                  />
+                  Male
+                  <br />
+                  <input
+                    type="radio"
+                    value="female"
+                    name="gender"
+                    checked={data.gender === "female"}
+                    onChange={onChange}
+                  />
+                  Female
+                </label>
+                <div style={{ fontSize: 14, color: "red" }}>
+                  {errors.gender}
+                </div>
+              </div>
+            </form>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <button
+            className="btn btn-primary"
+            type="submit"
+            onClick={handleSubmit}
+          >
+            Submit
+          </button>
+
+          <Button variant="danger" onClick={closeModal}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
 }
+
+export default UserModal;

@@ -1,7 +1,9 @@
 import React, { Component } from "react";
+import { Modal, Button } from "react-bootstrap";
 import axios from "axios";
 import "../App.css";
 import UsersList from "./UsersList";
+import UserModal from "./UserModal";
 //import {Link} from "react-router-dom"
 
 class UserForm extends Component {
@@ -13,6 +15,7 @@ class UserForm extends Component {
       gender: "",
     },
     visible: false,
+    modalVisibility: false,
     users: [],
     currentId: "",
     errors: {
@@ -132,6 +135,7 @@ class UserForm extends Component {
         visible: false,
         currentId: "",
       });
+      window.location = "/";
     }
   };
 
@@ -144,12 +148,16 @@ class UserForm extends Component {
   };
 
   editUser = (id) => {
-    this.setState({ currentId: id });
+    this.setState({
+      currentId: id,
+      modalVisibility: true,
+    });
+    console.log("edit clicked");
     axios
       .get("/api/users/" + id)
       .then((res) => {
         this.setState({
-          visible: !this.state.visible,
+          modalVisiblitiy: true,
           data: {
             ...this.state.data,
             firstName: res.data.firstName,
@@ -170,14 +178,20 @@ class UserForm extends Component {
     this.setState({
       users: users.sort((a, b) =>
         this.state.direction[name] === "asc"
-          ? a[name].toString().localeCompare(b[name].toString())
-          : b[name].toString().localeCompare(a[name].toString())
+          ? a[name] < b[name] && -1
+          : a[name] > b[name] && -1
       ),
       direction: {
         [name]: this.state.direction[name] === "asc" ? "desc" : "asc",
       },
     });
+    console.log(users);
   };
+
+  closeModal = () => {
+    this.setState({ modalVisibility: !this.state.modalVisibility });
+  };
+
   render() {
     return (
       <div className="container">
@@ -196,100 +210,117 @@ class UserForm extends Component {
         </div>
         <br />
         <br />
-        {!this.state.visible ? null : (
-          <form onSubmit={this.handleSubmit} className="contain">
-            <div className="form-group">
-              <label>Firstname: </label>
-              <br />
-              <input
-                type="text"
-                placeholder="Enter firstname"
-                name="firstName"
-                className="form-group"
-                value={this.state.data.firstName}
-                onChange={this.onChange}
-              />
-
-              <div style={{ fontSize: 12, color: "red" }}>
-                {this.state.errors.firstName ? "can't be blank" : ""}
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label>Lastname: </label>
-              <br />
-              <input
-                type="text"
-                placeholder="Enter lastname"
-                name="lastName"
-                className="form-group"
-                value={this.state.data.lastName}
-                onChange={this.onChange}
-              />
-              {/* <div style={{ fontSize: 12, color: "red"}}>{this.state.lError}</div> */}
-
-              <div style={{ fontSize: 12, color: "red" }}>
-                {this.state.errors.lastName ? "can't be blank" : ""}
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label>Age: </label>
-              <br />
-              <input
-                type="number"
-                name="age"
-                className="form-group"
-                value={this.state.data.age}
-                onChange={this.onChange}
-              />
-              {/* <div style={{ fontSize: 12, color: "red"}}>{this.state.aError}</div> */}
-
-              <div style={{ fontSize: 12, color: "red" }}>
-                {this.state.errors.age ? "can't be blank" : ""}
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label>
-                Gender:
+        <div>
+          {this.state.visible ? (
+            <form onSubmit={this.handleSubmit} className="contain">
+              <div className="form-group">
+                <label>Firstname: </label>
                 <br />
                 <input
-                  type="radio"
-                  value="male"
-                  name="gender"
-                  checked={this.state.data.gender === "male"}
+                  type="text"
+                  placeholder="Enter firstname"
+                  name="firstName"
+                  className="form-group"
+                  value={this.state.data.firstName}
                   onChange={this.onChange}
                 />
-                Male
+
+                <div style={{ fontSize: 12, color: "red" }}>
+                  {this.state.errors.firstName ? "can't be blank" : ""}
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>Lastname: </label>
                 <br />
                 <input
-                  type="radio"
-                  value="female"
-                  name="gender"
-                  checked={this.state.data.gender === "female"}
+                  type="text"
+                  placeholder="Enter lastname"
+                  name="lastName"
+                  className="form-group"
+                  value={this.state.data.lastName}
                   onChange={this.onChange}
                 />
-                Female
-              </label>
-              {/* <div style={{ fontSize: 12, color: "red"}}>{this.state.gError}</div> */}
+                {/* <div style={{ fontSize: 12, color: "red"}}>{this.state.lError}</div> */}
 
-              <div style={{ fontSize: 12, color: "red" }}>
-                {this.state.errors.gender ? "can't be blank" : ""}
+                <div style={{ fontSize: 12, color: "red" }}>
+                  {this.state.errors.lastName ? "can't be blank" : ""}
+                </div>
               </div>
-            </div>
 
-            <div className="form-group">
-              <input type="submit" value="Submit" className="btn btn-primary" />
-            </div>
-          </form>
-        )}
-        <UsersList
-          users={this.state.users}
-          deleteUser={this.deleteUser}
-          editUser={this.editUser}
-          sortUser={this.sortUser}
-        />
+              <div className="form-group">
+                <label>Age: </label>
+                <br />
+                <input
+                  type="number"
+                  name="age"
+                  className="form-group"
+                  value={this.state.data.age}
+                  onChange={this.onChange}
+                />
+                {/* <div style={{ fontSize: 12, color: "red"}}>{this.state.aError}</div> */}
+
+                <div style={{ fontSize: 12, color: "red" }}>
+                  {this.state.errors.age ? "can't be blank" : ""}
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>
+                  Gender:
+                  <br />
+                  <input
+                    type="radio"
+                    value="male"
+                    name="gender"
+                    checked={this.state.data.gender === "male"}
+                    onChange={this.onChange}
+                  />
+                  Male
+                  <br />
+                  <input
+                    type="radio"
+                    value="female"
+                    name="gender"
+                    checked={this.state.data.gender === "female"}
+                    onChange={this.onChange}
+                  />
+                  Female
+                </label>
+                {/* <div style={{ fontSize: 12, color: "red"}}>{this.state.gError}</div> */}
+
+                <div style={{ fontSize: 12, color: "red" }}>
+                  {this.state.errors.gender ? "can't be blank" : ""}
+                </div>
+              </div>
+
+              <div className="form-group">
+                <input
+                  type="submit"
+                  value="Submit"
+                  className="btn btn-primary"
+                />
+              </div>
+            </form>
+          ) : null}
+
+          {this.state.modalVisibility ? (
+            <UserModal
+              closeModal={this.closeModal}
+              onChange={this.onChange}
+              handleSubmit={this.handleSubmit}
+              data={this.state.data}
+              errors={this.state.errors}
+            />
+          ) : null}
+
+          <UsersList
+            users={this.state.users}
+            deleteUser={this.deleteUser}
+            editUser={this.editUser}
+            sortUser={this.sortUser}
+          />
+        </div>
       </div>
     );
   }
